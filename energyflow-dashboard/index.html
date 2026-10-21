@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b1220">
+  <title>EnergyFlow | Market Analytics</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="#overview" aria-label="EnergyFlow home">
+        <span class="brand-mark"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M18.8 2.8 7.2 17.1h7.3l-1.2 12.1 11.5-15h-7.2z" fill="currentColor"/></svg></span>
+        <span>energy<span class="brand-light">flow</span><small>MARKET INTELLIGENCE</small></span>
+      </a>
+      <div class="workspace-label">WORKSPACE</div>
+      <nav class="nav-list" aria-label="Main navigation">
+        <a class="nav-link active" href="#overview"><span class="nav-icon">◫</span> Overview</a>
+        <a class="nav-link" href="#analytics"><span class="nav-icon">⌁</span> Price analytics</a>
+        <a class="nav-link" href="#records"><span class="nav-icon">▤</span> Market records</a>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="api-status"><span class="status-dot" id="sidebarStatusDot"></span><div><strong id="sidebarStatus">Connecting API</strong><small>Backend connection</small></div></div>
+        <div class="sidebar-foot"><span class="mini-logo">EF</span><div><strong>EnergyFlow</strong><small>Portfolio demo · v1.0</small></div></div>
+      </div>
+    </aside>
+
+    <main class="main-content" id="overview">
+      <header class="topbar">
+        <button class="mobile-menu" id="mobileMenu" aria-label="Toggle menu">☰</button>
+        <div class="breadcrumb">Workspace <span>/</span> <strong>Market overview</strong></div>
+        <div class="topbar-right"><span class="live-pill"><span></span> LOCAL DEMO</span><button class="icon-button" id="refreshButton" title="Refresh data" aria-label="Refresh data">↻</button><div class="avatar">EF</div></div>
+      </header>
+
+      <section class="page-heading">
+        <div><p class="eyebrow">ENERGY MARKET INTELLIGENCE</p><h1>Market overview<span class="heading-period">.</span></h1><p class="subtitle">A clear view of electricity price trends and market performance.</p></div>
+        <div class="heading-controls"><label for="regionSelect">MARKET REGION</label><select id="regionSelect"><option value="ES">Spain (ES)</option></select><span class="updated" id="lastUpdated">Waiting for data…</span></div>
+      </section>
+
+      <section class="metrics-grid" aria-label="Market summary">
+        <article class="metric-card"><div class="metric-top"><span class="metric-label">AVERAGE PRICE</span><span class="metric-icon mint">↗</span></div><div class="metric-value" id="averagePrice">—</div><div class="metric-bottom"><span class="metric-unit">EUR / MWh</span><span class="metric-note">Selected region</span></div></article>
+        <article class="metric-card"><div class="metric-top"><span class="metric-label">LOWEST PRICE</span><span class="metric-icon blue">↓</span></div><div class="metric-value" id="minimumPrice">—</div><div class="metric-bottom"><span class="metric-unit">EUR / MWh</span><span class="metric-note">Observed minimum</span></div></article>
+        <article class="metric-card"><div class="metric-top"><span class="metric-label">HIGHEST PRICE</span><span class="metric-icon orange">↑</span></div><div class="metric-value" id="maximumPrice">—</div><div class="metric-bottom"><span class="metric-unit">EUR / MWh</span><span class="metric-note">Observed maximum</span></div></article>
+        <article class="metric-card"><div class="metric-top"><span class="metric-label">MARKET RECORDS</span><span class="metric-icon violet">▤</span></div><div class="metric-value" id="recordCount">—</div><div class="metric-bottom"><span class="metric-unit">DATA POINTS</span><span class="metric-note">Available records</span></div></article>
+      </section>
+
+      <section class="content-grid" id="analytics">
+        <article class="panel chart-panel">
+          <div class="panel-header"><div><p class="eyebrow">PRICE MOVEMENT</p><h2>Electricity price trend</h2><p class="panel-subtitle">Price in EUR per MWh across available observations</p></div><span class="chart-legend"><i></i> Market price</span></div>
+          <div class="chart-wrap"><canvas id="priceChart" aria-label="Electricity price trend chart" role="img"></canvas><div class="chart-empty" id="chartEmpty">Loading market records…</div></div>
+          <div class="chart-footer"><span><i class="legend-line"></i> Observed prices</span><span id="chartDataNote">Connecting to API…</span></div>
+        </article>
+        <article class="panel range-panel">
+          <div class="panel-header"><div><p class="eyebrow">PRICE DISTRIBUTION</p><h2>Market range</h2></div><span class="range-icon">↕</span></div>
+          <p class="range-description">Difference between the lowest and highest recorded prices.</p>
+          <div class="range-big" id="priceSpread">— <small>EUR/MWh</small></div>
+          <div class="range-track"><span id="rangeFill"></span><i id="rangeMinMarker"></i><i id="rangeMaxMarker"></i></div>
+          <div class="range-labels"><span><small>MINIMUM</small><strong id="rangeMin">—</strong></span><span class="range-center"><small>AVERAGE</small><strong id="rangeAvg">—</strong></span><span class="range-right"><small>MAXIMUM</small><strong id="rangeMax">—</strong></span></div>
+          <div class="insight-box"><span class="insight-symbol">✦</span><div><strong>Market insight</strong><p id="marketInsight">Connect the API to generate a summary of the selected market.</p></div></div>
+        </article>
+      </section>
+
+      <section class="panel records-panel" id="records">
+        <div class="panel-header records-header"><div><p class="eyebrow">DATA EXPLORER</p><h2>Recent market records</h2><p class="panel-subtitle">Latest observations returned by the API.</p></div><div class="table-actions"><input id="tableSearch" type="search" placeholder="Search records…" aria-label="Search records"><button class="secondary-button" id="exportButton">↓ Export CSV</button></div></div>
+        <div class="table-scroll"><table><thead><tr><th>RECORD</th><th>REGION</th><th>OBSERVATION TIME</th><th>PRICE (EUR/MWh)</th><th>STATUS</th></tr></thead><tbody id="recordsBody"><tr><td colspan="5" class="table-message">Waiting for API data…</td></tr></tbody></table></div>
+        <div class="table-footer"><span id="recordsCount">0 records</span><span>Source: EnergyFlow API</span></div>
+      </section>
+      <footer class="page-footer"><span>ENERGYFLOW <b>·</b> MARKET ANALYTICS</span><span>Built with Python, FastAPI &amp; Chart.js</span></footer>
+    </main>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
